@@ -29,12 +29,12 @@
 </head>
 
 <body>
-    <div style="width: 100%; text-align:left; font-size:9pt;"> 
+    <div style="width: 100%; text-align:left; font-size:9pt;">
         <div>UNIVERSIDAD NACIONAL DEL ALTIPLANO</div>
         <div>VICERRECTORADO ACADÉMIO</div>
     </div>
 
-    <div style="width: 100%; text-align:left; text-align:center; margin-top:16px;"> 
+    <div style="width: 100%; text-align:left; text-align:center; margin-top:16px;">
         <div><strong style="font-size: 11pt; font-weight:700;">EVALUACIÓN DE LA DISTRIBUCIÓN DE CARGA</strong></div>
     </div>
 
@@ -87,6 +87,7 @@
             $otros_horas = 0;
             $dirigido_cursos = 0;
             $dirigido_horas = 0;
+            $tempC = 0;
         @endphp
 
         @foreach($data as $dato)
@@ -94,7 +95,7 @@
 
         <tr>
             @php
-                $datoss = range(1, 10); 
+                $datoss = range(1, 10);
             @endphp
             <td><div style="text-align: center">{{ convertirARomano($dato['ciclo_valor']) }}</div></td>
 
@@ -106,7 +107,7 @@
                         <td><div style="text-align: center"> {{ $dato['datos'][buscarLetraA( $dato['datos'], 'A')]['num_cursos'] }} </div></td>
                         @php  $a_cursos += $dato['datos'][buscarLetraA( $dato['datos'], 'A')]['num_cursos']; @endphp
                     @endif
-                @endif 
+                @endif
                 @if($key == 1)
                     @if(buscarLetraA( $dato['datos'], 'A') == 99 )
                         <td></td>
@@ -114,7 +115,7 @@
                         <td> <div style="text-align: center"> {{ $dato['datos'][buscarLetraA( $dato['datos'], 'A')]['num_horas'] }} </div></td>
                         @php  $a_horas += $dato['datos'][buscarLetraA( $dato['datos'], 'A')]['num_horas']; @endphp
                     @endif
-                @endif    
+                @endif
                 @if($key == 2)
                     @if(buscarLetraA( $dato['datos'], 'B') == 99 )
                         <td></td>
@@ -122,7 +123,7 @@
                         <td> <div style="text-align: center"> {{ $dato['datos'][buscarLetraA( $dato['datos'], 'B')]['num_cursos'] }} </div></td>
                         @php  $b_cursos += $dato['datos'][buscarLetraA( $dato['datos'], 'B')]['num_cursos']; @endphp
                     @endif
-                @endif 
+                @endif
                 @if($key == 3)
                     @if(buscarLetraA( $dato['datos'], 'B') == 99 )
                         <td></td>
@@ -130,16 +131,16 @@
                         <td><div style="text-align: center"> {{ $dato['datos'][buscarLetraA( $dato['datos'], 'B')]['num_horas'] }} </div></td>
                         @php  $b_horas += $dato['datos'][buscarLetraA( $dato['datos'], 'B')]['num_horas']; @endphp
                     @endif
-                @endif    
+                @endif
                 @if($key == 4)
                     @if(buscarLetraA( $dato['datos'], 'UNICO') == 99 )
                         <td></td>
                     @else
                         <td><div style="text-align: center"> {{ $dato['datos'][buscarLetraA( $dato['datos'], 'UNICO')]['num_cursos'] }} </div></td>
                         @php  $unico_cursos += $dato['datos'][buscarLetraA( $dato['datos'], 'UNICO')]['num_cursos']; @endphp
-                        
+
                     @endif
-                @endif 
+                @endif
                 @if($key == 5)
                     @if(buscarLetraA( $dato['datos'], 'UNICO') == 99 )
                         <td></td>
@@ -147,31 +148,55 @@
                         <td><div style="text-align: center"> {{ $dato['datos'][buscarLetraA( $dato['datos'], 'UNICO')]['num_horas'] }} </div></td>
                         @php  $unico_horas += $dato['datos'][buscarLetraA( $dato['datos'], 'UNICO')]['num_horas']; @endphp
                     @endif
-                @endif 
-                
+                @endif
+
                 @if($key == 6)
                     @php
                         $buscarC = buscarLetraA($dato['datos'], 'C') == 99;
                         $buscarD = buscarLetraA($dato['datos'], 'D') == 99;
                         $buscarE = buscarLetraA($dato['datos'], 'E') == 99;
                     @endphp
-                
-                    @if($buscarC != 99)
-                        <td><div style="text-align: center"> {{ $dato['datos'][buscarLetraA( $dato['datos'], 'C')]['num_cursos'] }} </div></td>
-                        @php  $otros_cursos += $dato['datos'][buscarLetraA( $dato['datos'], 'C')]['num_cursos']; @endphp
-                    @else
-                        @if($buscarD != 99)
-                            <td><div style="text-align: center"> {{ $dato['datos'][buscarLetraA( $dato['datos'], 'D')]['num_cursos'] }} </div></td>
-                            @php  $otros_cursos += $dato['datos'][buscarLetraA( $dato['datos'], 'D')]['num_cursos']; @endphp
-                        @else
-                            @if($buscarE != 99)
-                                <td><div style="text-align: center"> {{ $dato['datos'][buscarLetraA( $dato['datos'], 'E')]['num_cursos'] }} </div></td>
-                                @php  $otros_cursos += $dato['datos'][buscarLetraA( $dato['datos'], 'E')]['num_cursos']; @endphp
-                            @else
-                                <td></td>
-                            @endif
-                        @endif
-                    @endif
+
+                    @switch(true)
+                        @case($buscarC != 99 && $buscarD != 99 && $buscarE != 99)
+                            <td><div style="text-align: center">{{ $dato['datos'][buscarLetraA($dato['datos'], 'C')]['num_cursos'] + $dato['datos'][buscarLetraA($dato['datos'], 'D')]['num_cursos'] + $dato['datos'][buscarLetraA($dato['datos'], 'E')]['num_cursos'] }}</div></td>
+                            @php $otros_cursos += $dato['datos'][buscarLetraA($dato['datos'], 'C')]['num_cursos'] + $dato['datos'][buscarLetraA($dato['datos'], 'D')]['num_cursos'] + $dato['datos'][buscarLetraA($dato['datos'], 'E')]['num_cursos']; @endphp
+                            @break
+                        @case($buscarC != 99 && $buscarD != 99)
+                            <td><div style="text-align: center">{{ $dato['datos'][buscarLetraA($dato['datos'], 'C')]['num_cursos'] + $dato['datos'][buscarLetraA($dato['datos'], 'D')]['num_cursos'] }}</div></td>
+                            @php $otros_cursos += $dato['datos'][buscarLetraA($dato['datos'], 'C')]['num_cursos'] + $dato['datos'][buscarLetraA($dato['datos'], 'D')]['num_cursos']; @endphp
+                            @break
+
+                        @case($buscarC != 99 && $buscarE != 99)
+                            <td><div style="text-align: center">{{ $dato['datos'][buscarLetraA($dato['datos'], 'C')]['num_cursos'] + $dato['datos'][buscarLetraA($dato['datos'], 'E')]['num_cursos'] }}</div></td>
+                            @php $otros_cursos += $dato['datos'][buscarLetraA($dato['datos'], 'C')]['num_cursos'] + $dato['datos'][buscarLetraA($dato['datos'], 'E')]['num_cursos']; @endphp
+                            @break
+
+                        @case($buscarD != 99 && $buscarE != 99)
+                            <td><div style="text-align: center">{{ $dato['datos'][buscarLetraA($dato['datos'], 'D')]['num_cursos'] + $dato['datos'][buscarLetraA($dato['datos'], 'E')]['num_cursos'] }}</div></td>
+                            @php $otros_cursos += $dato['datos'][buscarLetraA($dato['datos'], 'D')]['num_cursos'] + $dato['datos'][buscarLetraA($dato['datos'], 'E')]['num_cursos']; @endphp
+                            @break
+
+                        @case($buscarC != 99 && $buscarD == 99 && $buscarE == 99)
+                            <td><div style="text-align: center">{{ $dato['datos'][buscarLetraA($dato['datos'], 'C')]['num_cursos'] }}</div></td>
+                            @php $otros_cursos += $dato['datos'][buscarLetraA($dato['datos'], 'C')]['num_cursos']; @endphp
+                            @break
+                        
+                        @case($buscarD != 99 && $buscarC == 99 && $buscarE == 99)
+                            <td><div style="text-align: center">{{ $dato['datos'][buscarLetraA($dato['datos'], 'D')]['num_cursos'] }}</div></td>
+                            @php $otros_cursos += $dato['datos'][buscarLetraA($dato['datos'], 'C')]['num_cursos']; @endphp
+                            @break
+
+                        @case($buscarE != 99 && $buscarD == 99 && $buscarC == 99)
+                            <td><div style="text-align: center">{{ $dato['datos'][buscarLetraA($dato['datos'], 'E')]['num_cursos'] }}</div></td>
+                            @php $otros_cursos += $dato['datos'][buscarLetraA($dato['datos'], 'C')]['num_cursos']; @endphp
+                            @break
+                        @case($buscarE == 99 && $buscarD == 99 && $buscarC == 99)
+                            <td></td>
+                            @break
+                    @endswitch
+
+
                 @endif
 
                 @if($key == 7)
@@ -180,7 +205,7 @@
                         $buscarD = buscarLetraA($dato['datos'], 'D') == 99;
                         $buscarE = buscarLetraA($dato['datos'], 'E') == 99;
                     @endphp
-                
+
                     @if($buscarC != 99)
                         <td><div style="text-align: center"> {{ $dato['datos'][buscarLetraA( $dato['datos'], 'C')]['num_horas'] }} </div></td>
                         @php  $otros_horas += $dato['datos'][buscarLetraA( $dato['datos'], 'C')]['num_horas']; @endphp
@@ -204,7 +229,7 @@
                         $buscarDIRIGIDO = buscarLetraA($dato['datos'], 'DIRIGIDO') == 99;
                         $buscarRE = buscarLetraA($dato['datos'], 'RE') == 99;
                     @endphp
-                
+
                     @if($buscarDIRIGIDO != 99)
                         <td><div style="text-align: center"> {{ $dato['datos'][buscarLetraA( $dato['datos'], 'DIRIGIDO')]['num_cursos'] }} </div></td>
                         @php  $dirigido_cursos += $dato['datos'][buscarLetraA( $dato['datos'], 'DIRIGIDO')]['num_cursos']; @endphp
@@ -223,7 +248,7 @@
                     $buscarDIRIGIDO = buscarLetraA($dato['datos'], 'DIRIGIDO') == 99;
                     $buscarRE = buscarLetraA($dato['datos'], 'RE') == 99;
                 @endphp
-            
+
                 @if($buscarDIRIGIDO != 99)
                     <td><div style="text-align: center"> {{ $dato['datos'][buscarLetraA( $dato['datos'], 'DIRIGIDO')]['num_horas'] }} </div></td>
                     @php  $dirigido_horas += $dato['datos'][buscarLetraA( $dato['datps'], 'DIRIGIDO')]['num_horas']; @endphp
@@ -425,8 +450,8 @@
 
     <table>
         <tr>
-            <td style="width: 350px">   
-                <div style="font-size: 10pt;">DISTRIBUCION REALIZADA</div>     
+            <td style="width: 350px">
+                <div style="font-size: 10pt;">DISTRIBUCION REALIZADA</div>
                 <table class="tabla-c1" style="width: 280px; font-size:8pt; ">
                     <tr>
                         <th style="border: 1px solid grey;"><div style="text-align: center;">N° Cursos</div></th>
@@ -438,7 +463,7 @@
                     </tr>
                 </table>
             </td>
-            <td style="width: 350px">   
+            <td style="width: 350px">
                 <div style="font-size: 10pt;">DIFICIT DE DOCENTES</div>
                 <table class="tabla-c1" style="width: 280px; font-size:8pt; ">
                     <tr>
@@ -472,7 +497,7 @@
 
 
 
-    
+
 
     @php
         function convertirARomano($numero)

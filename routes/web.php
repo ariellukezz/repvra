@@ -7,4 +7,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/pdf', [ReporteController::class, 'generatePDF']);
+Route::get('/pdf/{p}', [ReporteController::class, 'generatePDF']);

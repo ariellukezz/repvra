@@ -8,13 +8,13 @@ use DB;
 
 class ReporteController extends Controller
 {
-    public function generatePDF()
+    public function generatePDF($p)
     {
         $datos = DB::select("
             WITH cursos_filtrados AS (
                 SELECT *
                 FROM cursos
-                WHERE prog_id IN (3)
+                WHERE prog_id IN ($p)
             )
             SELECT 
                 grupos_y_ciclos.grupo_valor,
